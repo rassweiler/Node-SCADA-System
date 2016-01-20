@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Current Time: #{data.CURRENT}
+  h2 Previous Time: #{data.LAST}
+  h3 Best Time: #{data.BEST}
+  h4 Average Time: #{data.AVERAGE}
+  h1 History
+  ol
+    each item in data.HISTORY
+      li= item
