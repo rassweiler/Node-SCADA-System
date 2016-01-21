@@ -1,11 +1,31 @@
 extends layout
 
 block content
-  h1 Current Time: #{data.CURRENT}
-  h2 Previous Time: #{data.LAST}
-  h3 Best Time: #{data.BEST}
-  h4 Average Time: #{data.AVERAGE}
-  h1 History
-  ol
-    each item in data.HISTORY
-      li= item
+  div.container
+    h1.text-center.main-title L3E Cycle Time Data
+    div.row
+      div.col-xs-4.div-box
+        h2.header-title.text-center Cycle Information
+        div.col-xs-8.box-top
+          h2#current-time Current Time:
+          h2 Previous Time:
+          h2 Best Time:
+          h2 Average Time:
+        div.col-xs-4.box-top
+          h2(class=''+ cc) #{data.CURRENT}s
+          h2(class=''+ lc) #{data.LAST}s
+          h2(class=''+ bc) #{data.BEST}s
+          h2(class=''+ ac) #{data.AVERAGE}s
+      div.col-xs-4.div-box.div-middle
+        h2.header-title.text-center Cycle History
+        div.col-xs-12.box-top
+          each item in data.HISTORY
+            h2.text-center #{item} Seconds
+      div.col-xs-4.div-box
+        h2.header-title.text-center Build Information
+        div.col-xs-7.box-top
+          h2 Parts This Shift:
+          h2 Parts This Hour:
+        div.col-xs-5.box-top
+          h2.coloured-data #{data.PARTSCS} / #{pps}
+          h2.coloured-data #{data.PARTSCH}
