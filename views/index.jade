@@ -7,25 +7,26 @@ block content
       div.col-xs-4.div-box
         h2.header-title.text-center Cycle Information
         div.col-xs-8.box-top
-          h2#current-time Current Time:
-          h2 Previous Time:
-          h2 Best Time:
-          h2 Average Time:
+          h3 Current Time:
+          h3 Previous Time:
+          h3 Best Time:
+          h3 Average Time:
         div.col-xs-4.box-top
-          h2(class=''+ cc) #{data.CURRENT}s
-          h2(class=''+ lc) #{data.LAST}s
-          h2(class=''+ bc) #{data.BEST}s
-          h2(class=''+ ac) #{data.AVERAGE}s
-      div.col-xs-4.div-box.div-middle
+          h3(class=''+ cc) #{data.CURRENT}s
+          h3(class=''+ lc) #{data.LAST}s
+          h3(class=''+ bc) #{data.BEST}s
+          h3(class=''+ ac) #{data.AVERAGE}s
+        h4 Updated: #{date}
+      div.col-xs-3.div-box.div-middle
         h2.header-title.text-center Cycle History
         div.col-xs-12.box-top
           each item in data.HISTORY
-            h2.text-center #{item} Seconds
-      div.col-xs-4.div-box
+            h3.text-center #{item} Seconds
+      div.col-xs-5.div-box
         h2.header-title.text-center Build Information
         div.col-xs-7.box-top
-          h2 Parts This Shift:
-          h2 Parts This Hour:
+          h3 Parts This Shift:
+          h3 Parts This Hour:
         div.col-xs-5.box-top
-          h2.coloured-data #{data.PARTSCS} / #{pps}
-          h2.coloured-data #{data.PARTSCH}
+          h3.coloured-data #{data.PARTSCS} / #{pps}
+          h3.coloured-data #{data.PARTSCH}

@@ -21,7 +21,8 @@ router.get('/', function(req, res, next) {
 	if(data["AVERAGE"] > cycletime){
 		ac = "value-bad";
 	}
-	res.render('index', { title: 'Mitsubishi-SCADA', 'data':data, 'cc':cc, 'lc':lc, 'bc':bc, 'ac':ac, 'pps':pps });
+	var date = new Date(data["date"]);
+	res.render('index', { title: 'Mitsubishi-SCADA', 'data':data, 'cc':cc, 'lc':lc, 'bc':bc, 'ac':ac, 'pps':pps, 'date':date.toLocaleString('en') });
 });
 
 module.exports = router;
