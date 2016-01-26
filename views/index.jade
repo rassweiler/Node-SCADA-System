@@ -1,32 +1,46 @@
 extends layout
 
 block content
+  meta(http-equiv='refresh', content='2')
   div.container
     h1.text-center.main-title L3E Cycle Time Data
     div.row
       div.col-xs-4.div-box
-        h2.header-title.text-center Cycle Information
-        div.col-xs-8.box-top
-          h3 Current Time:
-          h3 Previous Time:
-          h3 Best Time:
-          h3 Average Time:
-        div.col-xs-4.box-top
-          h3(class=''+ cc) #{data.CURRENT}s
-          h3(class=''+ lc) #{data.LAST}s
-          h3(class=''+ bc) #{data.BEST}s
-          h3(class=''+ ac) #{data.AVERAGE}s
-        h4 Updated: #{date}
-      div.col-xs-3.div-box.div-middle
-        h2.header-title.text-center Cycle History
-        div.col-xs-12.box-top
+        h2.header-title.text-center Cycle Info
+        div.col-xs-12.box-top.datatext
+          div.col-xs-12
+            h4 Updated: #{date}
+          div.col-xs-12
+            p
+          div.col-xs-12
+            span Current Time: 
+            span(class=''+ cc) #{data.CURRENT}s
+          div.col-xs-12
+            span Previous Time: 
+            span(class=''+ lc) #{data.LAST}s
+          div.col-xs-12
+            span Best Time: 
+            span(class=''+ bc) #{data.BEST}s
+          div.col-xs-12
+            span Average Time: 
+            span(class=''+ ac) #{data.AVERAGE}s
+          div.col-xs-12
+            p
+          div.col-xs-12
+            h4
+              a(href='/history') View History
+      div.col-xs-2.div-box.div-middle
+        h2.header-title.text-center History
+        div.col-xs-12.box-top.datatext
           each item in data.HISTORY
-            h3.text-center #{item} Seconds
-      div.col-xs-5.div-box
-        h2.header-title.text-center Build Information
-        div.col-xs-7.box-top
-          h3 Parts This Shift:
-          h3 Parts This Hour:
-        div.col-xs-5.box-top
-          h3.coloured-data #{data.PARTSCS} / #{pps}
-          h3.coloured-data #{data.PARTSCH}
+            p.text-center #{item}s
+      div.col-xs-6.div-box
+        h2.header-title.text-center Build Info
+        div.col-xs-12.box-top.datatext
+          div.col-xs-12
+            span Parts This Shift: 
+            span.coloured-data #{data.PARTSCS} / #{pps}
+          div.col-xs-12
+            span Parts This Hour: 
+            span.coloured-data #{data.PARTSCH}
+          

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  div.container
+    h1.text-center.main-title L3E Data History
+    div.row
+      div.col-xs-3.div-box
+        h2.header-title.text-center Navigation
+        div.col-xs-12.box-top.datatext
+          div.col-xs-12
+            a(href='/') Back
+      div.col-xs-9.div-box.div-middle
+        h2.header-title.text-center Cycle History
+        div.col-xs-12.box-top.historyrow.datatextsmall
+          each item in data
+            div.col-xs-12.historydiv
+              span #{item["date"]} - Current CT: #{item["CURRENT"]}s, Last CT: #{item["LAST"]}s, Best CT: #{item["BEST"]}s, Average CT: #{item["AVERAGE"]}s, Parts This Shift: #{item["PARTSCS"]}, Parts This Hour: #{item["PARTSCH"]}
