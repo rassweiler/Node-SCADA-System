@@ -12,6 +12,6 @@ block content
       div.col-xs-9.div-box.div-middle
         h2.header-title.text-center Cycle History
         div.col-xs-12.box-top.historyrow.datatextsmall
-          each item in data
+          each item in data.reverse()
             div.col-xs-12.historydiv
               span #{item["date"]} - Current CT: #{item["CURRENT"]}s, Last CT: #{item["LAST"]}s, Best CT: #{item["BEST"]}s, Average CT: #{item["AVERAGE"]}s, Parts This Shift: #{item["PARTSCS"]}, Parts This Hour: #{item["PARTSCH"]}

@@ -20,7 +20,7 @@ connect();
 
 function connect(){
 	console.log("----------------\n" + new Date());
-	conn.initiateConnection({port: 5050, host: '169.254.195.11', ascii: false}, connected)
+	conn.initiateConnection({port: 5050, host: '169.254.107.11', ascii: false}, connected)
 }
 
 function disconnect(){
@@ -66,9 +66,7 @@ function valuesReady(anythingBad, values) {
 			val["LAST"] = val["LAST"]/10;
 			val["BEST"] = val["BEST"]/10;
 			val["AVERAGE"] = val["AVERAGE"]/10;
-			for(i in val["HISTORY"]){
-				val["HISTORY"][i] = val["HISTORY"][i]/10;
-			}
+			delete val["HISTORY"];
 			val.date = new Date(Date.now()).toLocaleString('en');
 			data["data"].push(val);
 			fs.writeFileSync(process.cwd() + '/Data/History/'+folder+'/'+file, JSON.stringify(data), "utf8");
