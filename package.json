@@ -1,6 +1,6 @@
 {
-  "name": "SCADA",
-  "version": "0.0.0",
+  "name": "Node-SCADA-System",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"

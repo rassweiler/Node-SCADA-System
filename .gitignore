@@ -35,3 +35,4 @@ node_modules
 
 # Directory for data collected from plc
 Data/*
+*.csv

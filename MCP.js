@@ -43,7 +43,9 @@ function connected(err) {
 
 function valuesReady(anythingBad, values) {
 	if (anythingBad) { 
-		console.log("SOMETHING WENT WRONG READING VALUES!!!!"); 
+		console.log("SOMETHING WENT WRONG READING VALUES!!!!");
+		disconnect();
+		setTimeout(connect, interval2);
 	}else{
 		if(LogIndex == LogCycles){
 			var date = new Date();
@@ -58,7 +60,11 @@ function valuesReady(anythingBad, values) {
 			if(!fs.existsSync(process.cwd() + '/Data/History/'+folder+'/'+file)){
 				fs.writeFileSync(process.cwd() + '/Data/History/'+folder+'/'+file, '{"data":[]}', "utf8");
 			}
-			var data = fs.readFileSync(process.cwd() + '/Data/History/'+folder+'/'+file);
+			try{
+				var data = fs.readFileSync(process.cwd() + '/Data/History/'+folder+'/'+file);
+			}catch(e){
+				setTimeout(connect,interval1);
+			}
 			data = JSON.parse(data);
 			var v = JSON.stringify(values);
 			val = JSON.parse(v);
@@ -69,7 +75,11 @@ function valuesReady(anythingBad, values) {
 			delete val["HISTORY"];
 			val.date = new Date(Date.now()).toLocaleString('en');
 			data["data"].push(val);
-			fs.writeFileSync(process.cwd() + '/Data/History/'+folder+'/'+file, JSON.stringify(data), "utf8");
+			try{
+				fs.writeFileSync(process.cwd() + '/Data/History/'+folder+'/'+file, JSON.stringify(data), "utf8");
+			}catch(e){
+				setTimeout(connect,interval1);
+			}
 			LogIndex = 0;
 		}else{
 			++LogIndex;
@@ -85,7 +95,11 @@ function valuesReady(anythingBad, values) {
 			data["HISTORY"][i] = data["HISTORY"][i]/10;
 		}
 		data.date = new Date(date).toLocaleString('en');
-		fs.writeFile(process.cwd() + "/Data/data.json", JSON.stringify(data), "utf8");
+		try{
+			fs.writeFile(process.cwd() + "/Data/data.json", JSON.stringify(data), "utf8");
+		}catch(e){
+			setTimeout(connect,interval1);
+		}
 		disconnect();
 		console.log("Finished Script, initiate timeout\n");
 		setTimeout(connect,interval1);

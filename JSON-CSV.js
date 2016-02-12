@@ -1,13 +1,14 @@
 var fs = require('fs');
+var filePath = process.argv[2];
+var fileName = process.argv[3];
 
 JSON2CSV();
-
 //http://jsfiddle.net/sturtevant/vunf9/
 //Modified for offline
 function JSON2CSV() {
-	var filePath = process.argv[2];
-	var fileName = process.argv[3];
+	console.log("Entered Func\n");
 	if(fs.existsSync(filePath)){
+		console.log("Passed If\n");
 		var data = fs.readFileSync(filePath);
 		data = JSON.parse(data);
 		var objArray = data["data"];
