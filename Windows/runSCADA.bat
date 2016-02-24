@@ -1,5 +1,4 @@
 cd ..
-start node MCP.js
-SLEEP 1
+start npm start
+SLEEP 10
 start chrome --start-fullscreen --app=http://localhost
-npm start
