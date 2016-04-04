@@ -1,48 +1,37 @@
 extends layout
 
 block content
-  meta(http-equiv='refresh', content='2')
+  meta(http-equiv='refresh', content='10')
+  link(rel='stylesheet', href='/d3/nv.d3.css')
+  script.
+    var ctvv=!{JSON.stringify(ctvariance)};
+    var ctvv2=!{JSON.stringify(ctvariance2)};
+  script(src='/d3/d3.v3.js')
+  script(src='/d3/nv.d3.js')
   div.container
-    h1.text-center.main-title L3E Cycle Time Data
+    h1.text-center.main-title Cell Cycle Time Data
     div.row
-      div.col-xs-4.div-box
-        h2.header-title.text-center Cycle Info
-        div.col-xs-12.box-top.datatext
-          div.col-xs-12
-            h4 Updated: #{data.date}
-          div.col-xs-12
-            p
-          div.col-xs-12
-            span Current Time: 
-            span(class=''+ cc) #{data.CURRENT}s
+      div.col-xs-12
+        p(style="padding:1em;margin:0em;font-size:200%;").text-center Cycle Time Variance 
+      div.col-xs-12
+        svg(style="padding:1em;margin:1em;width:90%;height:90%;margin-top:0em;padding-top:0em;")
+        script(src='/d3/chart.js')
+      div.col-xs-6.largefont
           div.col-xs-12
             span Previous Time: 
-            span(class=''+ lc) #{data.LAST}s
+            span(class=''+ lc) #{data["Last CT"]}s
           div.col-xs-12
             span Best Time: 
-            span(class=''+ bc) #{data.BEST}s
+            span(class=''+ bc) #{data["Best CT"]}s
           div.col-xs-12
             span Average Time: 
-            span(class=''+ ac) #{data.AVERAGE}s
+            span(class=''+ ac) #{data["Average CT"]}s
           div.col-xs-12
-            p
-          div.col-xs-12
-            h4
-              a(href='/history') View History
-          div.col-xs-12
-            h4 If the program has not been updated recently, press f11 at the cell and close the browser window and both cmd windows. Double click runSCADA.bat to restart the program.
-      div.col-xs-2.div-box.div-middle
-        h2.header-title.text-center History
-        div.col-xs-12.box-top.datatext
-          each item in data.HISTORY
-            p.text-center #{item}s
-      div.col-xs-6.div-box
-        h2.header-title.text-center Build Info
-        div.col-xs-12.box-top.datatext
+            span Last Cycle Variance: 
+            span(class=''+ ctv) #{data["CT Variance"]}s
+      div.col-xs-6.largefont
           div.col-xs-12
             span Parts This Shift: 
-            span.coloured-data #{data.PARTSCS} / #{pps}
+            span.coloured-data #{data["Parts Out"]} / #{data["Target Parts"]}
           div.col-xs-12
-            span Parts This Hour: 
-            span.coloured-data #{data.PARTSCH}
-          
+            p(style="font-size:65%;") Updated: #{data.date}

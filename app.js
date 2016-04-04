@@ -11,20 +11,14 @@ var app = express();
 var mc = require('mcprotocol');
 var fs = require('fs');
 var conn = new mc;
+var settings = require('./plc.json');
 var seconds1 = 2;var interval1 = seconds1*1000;
 var seconds2 = 30;var interval2 = seconds2*1000;
 var displayData = null;
 var historyData = null;
-var lastMin = null;
-var variables = {
-  CURRENT:'D1160',
-  LAST:'D1161',
-  BEST:'D1171',
-  AVERAGE:'D1172',
-  HISTORY:'D1161,10',
-  PARTSCS:'D1175',
-  PARTSCH:'D1174'
-};
+var lastMin = 0;
+var ctvar = [];
+var ctvar2 = [];
 
 connect();
 
@@ -75,9 +69,17 @@ app.use(function(err, req, res, next) {
   });
 });
 
+function GetVariableKeys(){
+	var keys = [];
+	for(var key in settings.variables){
+		keys.push(key);
+	}
+	return keys;
+}
+
 function connect(){
   console.log("----------------\n" + new Date());
-  conn.initiateConnection({port: 5050, host: '169.254.195.11', ascii: false}, connected)
+  conn.initiateConnection({port: settings.port, host: settings.ip, ascii: settings.ascii}, connected)
 }
 
 function disconnect(){
@@ -85,7 +87,6 @@ function disconnect(){
 }
 
 function read(){
-  console.log("Start Of Read Func");
   conn.readAllItems(valuesReady);
   setTimeout(read,interval1);
 }
@@ -98,8 +99,8 @@ function connected(err) {
     setTimeout(connect, interval2);
   }
   if(!err){
-    conn.setTranslationCB(function(tag) {return variables[tag];});  // This sets the "translation" to allow us to work with object names defined in our app not in the module
-    conn.addItems(['CURRENT', 'LAST', 'BEST', 'AVERAGE', 'HISTORY', 'PARTSCS', 'PARTSCH']);
+    conn.setTranslationCB(function(tag) {return settings.variables[tag];});  // This sets the "translation" to allow us to work with object names defined in our app not in the module
+    conn.addItems(GetVariableKeys());
     read();
   }
 }
@@ -116,8 +117,8 @@ function valuesReady(anythingBad, values) {
   }else{
     var date = new Date();
     var min = date.getMinutes();
-    if(min != lastMin){
-      lastMin = min;
+    var sec = date.getSeconds();
+    if((min == 0 || min == 30) && sec < 2){
       var year = date.getFullYear();
       var month = date.getMonth()+1;
       if (month < 10){
@@ -127,36 +128,36 @@ function valuesReady(anythingBad, values) {
       if (day < 10){
         day = '0'+day;
       }
-      var folder = ''+year+'-'+month;
-      console.log(folder);
-      var file = ''+year+'-'+month+'-'+day+'.json';
-      console.log(file);
-      if(!fs.existsSync(process.cwd() + '/Data/'+folder)){
-        fs.mkdirSync(process.cwd() + '/Data/'+folder);
+      var file = ''+year+month+day+'.json';
+      if(!fs.existsSync(settings.directory+settings.name)){
+        fs.mkdirSync(settings.directory+settings.name);
       }
-      if(!fs.existsSync(process.cwd() + '/Data/'+folder+'/'+file)){
-        fs.writeFileSync(process.cwd() + '/Data/'+folder+'/'+file, '{"data":[]}', "utf8");
+      if(!fs.existsSync(settings.directory+settings.name+file)){
+        fs.writeFileSync(settings.directory+settings.name+file, '[]', "utf8");
       }
       var temp = null;
       try{
-        historyData = fs.readFileSync(process.cwd() + '/Data/'+folder+'/'+file);
+        historyData = fs.readFileSync(settings.directory+settings.name+file);
       }catch(e){
         console.log(e);
       }
       historyData = JSON.parse(historyData);
       temp = JSON.stringify(values);
       temp = JSON.parse(temp);
-      temp["CURRENT"] = temp["CURRENT"]/10;
-      temp["LAST"] = temp["LAST"]/10;
-      temp["BEST"] = temp["BEST"]/10;
-      temp["AVERAGE"] = temp["AVERAGE"]/10;
-      delete temp["HISTORY"];
+      delete temp["Last CT"];
+      delete temp["Best CT"];
+      delete temp["Average CT"];
+      delete temp["Parts Out"];
+      delete temp["PARTSCH"];
+      delete temp["CT Variance"];
+      delete temp["Target CT"];
+      delete temp["Target Parts"];
       var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
       temp.date = FormatDate(date);
-      historyData["data"].push(temp);
+      historyData.push(temp);
       try{
-        fs.writeFileSync(process.cwd() + '/Data/'+folder+'/'+file, JSON.stringify(historyData), "utf8");
+        fs.writeFileSync(settings.directory+settings.name+file, JSON.stringify(historyData), "utf8");
       }catch(e){
         console.log(e);
       }
@@ -166,26 +167,46 @@ function valuesReady(anythingBad, values) {
       year = null;
       month = null;
       day = null;
-      folder = null;
       file = null;
     }
     var v = JSON.stringify(values);
     displayData = JSON.parse(v);
-    displayData["CURRENT"] = displayData["CURRENT"]/10;
-    displayData["LAST"] = displayData["LAST"]/10;
-    displayData["BEST"] = displayData["BEST"]/10;
-    displayData["AVERAGE"] = displayData["AVERAGE"]/10;
-    for(i in displayData["HISTORY"]){
-      displayData["HISTORY"][i] = displayData["HISTORY"][i]/10;
-    }
+    displayData["Last CT"] = displayData["Last CT"]/10;
+    displayData["Best CT"] = displayData["Best CT"]/10;
+    displayData["Average CT"] = displayData["Average CT"]/10;
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
     displayData.date = FormatDate(date);
+    if(min != lastMin){
+    	if(displayData["CT Variance"] >= 0){
+		    ctvar.push({
+		            x: Date.now(), y: displayData["CT Variance"]
+		        });
+		    ctvar2.push({
+		            x: Date.now(), y: 0
+		        });
+		}else{
+			ctvar.push({
+		            x: Date.now(), y: 0
+		        });
+			ctvar2.push({
+		            x: Date.now(), y: displayData["CT Variance"]
+		        });
+		}
+	    if(ctvar.length > 180){
+	    	ctvar.shift();
+	    	ctvar2.shift();
+	    }
+	    app.set('ctvar', ctvar);
+	    app.set('ctvar2', ctvar2);
+	    lastMin = min;
+	}
     app.set('displayData', displayData);
     tzoffset = null;
     v = null;
     date = null;
     min = null;
+    sec = null;
     console.log("Finished mcprotocol");
   }
 }

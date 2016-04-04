@@ -1,0 +1,19 @@
+{
+  "name": "Example",
+  "ip": "192.168.0.14",
+  "port" : "5050",
+  "ascii":false,
+  "directory":"./TestDataFolder/",
+  "variables": {
+    "Target CT":"D0000",
+    "Target Parts":"D0001",
+    "Last CT":"D0003",
+    "Best CT":"D0005",
+    "Average CT":"D0007",
+    "Parts Out":"D0009",
+    "CT Variance":"D0011"
+  },
+  "store":[
+    "Parts Out"
+  ]
+}
