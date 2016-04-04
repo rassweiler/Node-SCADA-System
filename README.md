@@ -1,6 +1,8 @@
 # Node-SCADA-System Standalone Version
 SCADA system.  Uses Node, Express, and [mcprotocol](https://github.com/plcpeople/mcprotocol)
 
+![alt tag](Documentation/Sample001.png)
+
 ## Setup
 - Clone repo
 - install [Nodejs](https://nodejs.org/en/)
