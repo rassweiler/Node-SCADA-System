@@ -1,5 +1,12 @@
 # Node-SCADA-System Standalone Version
-SCADA system.  Uses Node, Express, and [mcprotocol](https://github.com/plcpeople/mcprotocol)
+SCADA or MES system.
+
+## Libraries:
+	- Node
+	- Express
+	- [mcprotocol](https://github.com/plcpeople/mcprotocol)
+	- [c3.js](http://c3js.org/)
+	- [d3.js](https://d3js.org/)
 
 ![alt tag](Documentation/Sample001.png)
 

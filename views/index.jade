@@ -1,21 +1,21 @@
 extends layout
 
 block content
-  meta(http-equiv='refresh', content='10')
-  link(rel='stylesheet', href='/d3/nv.d3.css')
+  meta(http-equiv="refresh" content="10")
+  link(rel='stylesheet', href='/d3/c3.min.css')
   script.
-    var ctvv=!{JSON.stringify(ctvariance)};
-    var ctvv2=!{JSON.stringify(ctvariance2)};
+    var xc = !{JSON.stringify(xc)};
+    var positive = !{JSON.stringify(positive)};
+    var negative = !{JSON.stringify(negative)};
   script(src='/d3/d3.v3.js')
-  script(src='/d3/nv.d3.js')
+  script(src='/d3/c3.min.js')
   div.container
     h1.text-center.main-title Cell Cycle Time Data
     div.row
       div.col-xs-12
         p(style="padding:1em;margin:0em;font-size:200%;").text-center Cycle Time Variance 
-      div.col-xs-12
-        svg(style="padding:1em;margin:1em;width:90%;height:90%;margin-top:0em;padding-top:0em;")
-        script(src='/d3/chart.js')
+      div.col-xs-12#chart
+        script('src=/d3/chart.js')
       div.col-xs-6.largefont
           div.col-xs-12
             span Previous Time: 

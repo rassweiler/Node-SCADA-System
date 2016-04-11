@@ -119,3 +119,10 @@ h3{
 	padding:0%;
 	font-size: 370%;
 }
+
+#chart{
+  width: 100%;
+}
+#chart svg{
+	width:100%;
+}

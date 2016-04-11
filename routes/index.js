@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
 			ctv = "value-bad";
 		}
 	}
-	res.render('index', { title: 'Node-SCADA-System', 'data':data, 'cc':cc, 'lc':lc, 'bc':bc, 'ac':ac, 'ctv':ctv, 'pps':pps, 'ct': cycletime, 'ctvariance':req.app.get('ctvar'), 'ctvariance2':req.app.get('ctvar2')});
+	res.render('index', { title: 'Node-SCADA-System', 'data':data, 'cc':cc, 'lc':lc, 'bc':bc, 'ac':ac, 'ctv':ctv, 'pps':pps, 'ct': cycletime, 'xc':req.app.get('xc'), 'positive':req.app.get('positive'), 'negative':req.app.get('negative')});
 	data = null;
 	cycletime = null;
 });

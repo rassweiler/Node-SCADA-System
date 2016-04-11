@@ -17,8 +17,9 @@ var seconds2 = 30;var interval2 = seconds2*1000;
 var displayData = null;
 var historyData = null;
 var lastMin = 0;
-var ctvar = [];
-var ctvar2 = [];
+var xc = ['xc'];
+var positive = ['positive'];
+var negative = ['negative'];
 
 connect();
 
@@ -118,7 +119,7 @@ function valuesReady(anythingBad, values) {
     var date = new Date();
     var min = date.getMinutes();
     var sec = date.getSeconds();
-    if((min == 0 || min == 30) && sec < 2){
+    if((min == 0 || min == 30) && sec < 0){
       var year = date.getFullYear();
       var month = date.getMonth()+1;
       if (month < 10){
@@ -148,7 +149,6 @@ function valuesReady(anythingBad, values) {
       delete temp["Best CT"];
       delete temp["Average CT"];
       delete temp["Parts Out"];
-      delete temp["PARTSCH"];
       delete temp["CT Variance"];
       delete temp["Target CT"];
       delete temp["Target Parts"];
@@ -179,26 +179,22 @@ function valuesReady(anythingBad, values) {
     displayData.date = FormatDate(date);
     if(min != lastMin){
     	if(displayData["CT Variance"] >= 0){
-		    ctvar.push({
-		            x: Date.now(), y: displayData["CT Variance"]
-		        });
-		    ctvar2.push({
-		            x: Date.now(), y: 0
-		        });
-		}else{
-			ctvar.push({
-		            x: Date.now(), y: 0
-		        });
-			ctvar2.push({
-		            x: Date.now(), y: displayData["CT Variance"]
-		        });
-		}
-	    if(ctvar.length > 180){
-	    	ctvar.shift();
-	    	ctvar2.shift();
+        positive.push(displayData["CT Variance"]);
+        xc.push(Date.now());
+		    negative.push(0);
+		  }else{
+			  positive.push(0);
+        xc.push(Date.now());
+        negative.push(displayData["CT Variance"]);
+		  }
+	    if(xc.length > 181){
+	    	xc.splice(1,1);
+        positive.splice(1,1);
+        negative.splice(1,1);
 	    }
-	    app.set('ctvar', ctvar);
-	    app.set('ctvar2', ctvar2);
+	    app.set('xc', xc);
+	    app.set('positive', positive);
+      	app.set('negative', negative);
 	    lastMin = min;
 	}
     app.set('displayData', displayData);
