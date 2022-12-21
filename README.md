@@ -1,4 +1,5 @@
 # Node-SCADA-System Standalone Version
+* This Repo Is Now Read-Only *
 SCADA or MES system.
 
 ## Libraries:
